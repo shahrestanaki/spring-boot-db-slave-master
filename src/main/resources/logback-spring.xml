@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="15 seconds">
+
+    <!--for developer-user-->
+    <springProfile name="test">
+        <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) CLASS: %class{36} METHODE: %cyan(%M) LINE: %L MESSAGE: %yellow(%msg%n) %ex{short}</pattern>
+            </encoder>
+        </appender>
+        <root level="info">
+            <appender-ref ref="console" />
+        </root>
+    </springProfile>
+</configuration>
