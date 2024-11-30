@@ -1,27 +1,44 @@
 server:
-  port: 8010
+  port: 8011
 
 spring:
   datasource:
     read:
-      url: jdbc:oracle:thin:@x.x.x.x:1521/xxxxxxxxx
+      url: *
       driver-class-name: oracle.jdbc.OracleDriver
-      username: *******
-      password: *******
-    readWrite:
-      url: jdbc:h2:mem:testdb;INIT=CREATE SCHEMA IF NOT EXISTS SCHEMA_USERS;NON_KEYWORDS=KEY
+      username: *
+      password: *
+
+    readwrite:
+      url: jdbc:h2:mem:testdb;INIT=CREATE SCHEMA IF NOT EXISTS SCHEMA_USERS;NON_KEYWORDS=KEY;
       driver-class-name: org.h2.Driver
       username: sa
       password:
 
   jpa:
+    #importante for use read-only and read-write in ont methode (spring.jpa.open-in-view: false)
+    open-in-view: false
     show-sql: true
-
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+#        connection:
+#          handling_mode: DELAYED_ACQUISITION_AND_RELEASE_AFTER_TRANSACTION
+#    database: default
+#    hibernate:
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
   sql:
     init:
       data-locations:
         - classpath:data-h2.sql
- #----------- allowed cors origin
+
+#hibernate:
+#  connection:
+#    provider_disables_autocommit: true
+#----------- allowed cors origin
 cors:
   allowed-origins:
     - http://localhost:3000
