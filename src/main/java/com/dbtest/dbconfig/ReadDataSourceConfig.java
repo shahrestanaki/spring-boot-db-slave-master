@@ -3,15 +3,15 @@ package com.dbtest.dbconfig;
 import com.dbtest.base.DataSourceType;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -26,10 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * @author m.keyvanlou
- * @created 1/7/2024 - 2:20 PM
- */
 
 @Slf4j
 @Configuration
@@ -59,10 +55,10 @@ public class ReadDataSourceConfig {
     public DataSource writeDataSource() {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(env.getProperty("spring.datasource.readWrite.url"));
-            config.setUsername(env.getProperty("spring.datasource.readWrite.username"));
-            config.setPassword(env.getProperty("spring.datasource.readWrite.password"));
-            config.setDriverClassName(env.getProperty("spring.datasource.readWrite.driver-class-name"));
+            config.setJdbcUrl(env.getProperty("spring.datasource.readwrite.url"));
+            config.setUsername(env.getProperty("spring.datasource.readwrite.username"));
+            config.setPassword(env.getProperty("spring.datasource.readwrite.password"));
+            config.setDriverClassName(env.getProperty("spring.datasource.readwrite.driver-class-name"));
 
             return new HikariDataSource(config);
         } catch (Exception e) {
@@ -94,7 +90,7 @@ public class ReadDataSourceConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            @Qualifier("lazyDataSource") DataSource lazyDataSource) throws SQLException {
+            @Qualifier("lazyDataSource") DataSource lazyDataSource) {
         Properties properties = new Properties();
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(Boolean.parseBoolean(env.getProperty("spring.jpa.show-sql")));
@@ -102,7 +98,7 @@ public class ReadDataSourceConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         properties.put("spring.jpa.properties.hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
         properties.put("spring.jpa.properties.hibernate.hbm2ddl.auto", "none");
-        ///properties.put("spring.jpa.properties.hibernate.connection.provider_disables_autocommit", true);
+        //properties.put("hibernate.connection.provider_disables_autocommit", true);
         em.setDataSource(lazyDataSource);
         em.setJpaVendorAdapter(vendorAdapter);
         em.setPackagesToScan("com.dbtest.*");
@@ -129,5 +125,4 @@ public class ReadDataSourceConfig {
     private HikariDataSource connectionPoolDataSource(DataSource dataSource) {
         return new HikariDataSource(hikariConfig(dataSource));
     }
-
 }
