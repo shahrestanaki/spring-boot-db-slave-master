@@ -12,14 +12,18 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserSrv {
 
     public final IUserRepo userRepo;
 
+    @Transactional
     public List<User> findAll() {
         return userRepo.findAll();
     }
 
+    @Transactional
+    public void saveUser(User user) {
+        userRepo.save(user);
+    }
 }
 

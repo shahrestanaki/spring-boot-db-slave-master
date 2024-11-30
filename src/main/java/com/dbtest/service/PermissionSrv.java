@@ -12,11 +12,10 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PermissionSrv {
     public final IPermissionRepo permissionRepo;
 
-
+    @Transactional(readOnly = true)
     public List<Permission> findAll() {
         return permissionRepo.findAll();
     }

@@ -1,6 +1,6 @@
 package com.dbtest.api;
 
-import com.dbtest.entity.Permission;
+import com.dbtest.service.PermissionAndUserSrv;
 import com.dbtest.service.PermissionSrv;
 import com.dbtest.service.UserSrv;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     private final PermissionSrv permissionSrv;
     private final UserSrv userSrv;
+    private final PermissionAndUserSrv permissionAndUserSrv;
 
 
     @GetMapping(value = "test")
@@ -27,13 +28,21 @@ public class MainController {
 
 
     @GetMapping(value = "readData")
-    public @ResponseBody Object readData() {
+    public @ResponseBody
+    Object readData() {
         return permissionSrv.findAll();
     }
 
     @GetMapping(value = "writeData")
-    public @ResponseBody Object writeData(){
+    public @ResponseBody
+    Object writeData() {
         return userSrv.findAll();
+    }
+
+    @GetMapping(value = "getAndSave")
+    public @ResponseBody
+    Object getAndSave() {
+        return permissionAndUserSrv.getAndSave();
     }
 
 }
